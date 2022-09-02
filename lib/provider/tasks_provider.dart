@@ -9,6 +9,7 @@ class TasksProvider extends ChangeNotifier{
     retrieveTasks();
    }
   void retrieveTasks([DateTime? newDateTime= null])async{
+    tasks = [];
     if(newDateTime!=null)
       date = newDateTime;
     var tasksQuerySnapshot =await MyDataBase.getTasks(date);

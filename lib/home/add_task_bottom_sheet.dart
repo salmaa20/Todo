@@ -5,6 +5,7 @@ import 'package:todo_c6_sat/my_database.dart';
 import 'package:todo_c6_sat/provider/tasks_provider.dart';
 import 'package:todo_c6_sat/task.dart';
 
+
 class AddTaskBottomSheet extends StatefulWidget {
 
   @override
@@ -15,6 +16,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<TasksProvider>(context,listen: false);
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(24),
@@ -23,7 +25,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Add Task'),
+              Center(child: Text('Add Task')),
               TextFormField(
                 controller: titleController,
                 validator: (currentText){
@@ -50,6 +52,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   labelText: 'Details',
                 ),
               ),
+              SizedBox(height: 12),
+              Text('Select Date',
+                  style: Theme.of(context).textTheme.titleMedium,),
               InkWell(
                 onTap: (){
                   showDatePickerDialog();
@@ -73,6 +78,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   ),
                   onPressed: (){
                     validateForm();
+                   provider.retrieveTasks();
               }, child:Text('Add',style: TextStyle(
                 fontSize: 18
               ),) )
@@ -83,7 +89,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     );
   }
   void validateForm()async{
-    var provider = Provider.of<TasksProvider>(context,listen: false);
+
 
     if(formKey.currentState?.validate()==true){
       // title, desc,date
@@ -97,7 +103,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       showLoading(context,'Loading...',isCancelable: false);
       MyDataBase.addTask(newTask)
       .then((value) {
-        provider.retrieveTasks();
+
         hideLoading(context);
         showMessage(context, 'task added successfully',
         posActionName: 'ok',posActionCallBack: (){
@@ -110,7 +116,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         showMessage(context, error.toString());
       }).timeout(Duration(seconds: 3),onTimeout:() {
         hideLoading(context);
-        provider.retrieveTasks();
+
         showMessage(context, 'Error connecting to server,'
             'please try again',posActionName: 'ok');
       },).timeout(Duration(seconds: 5,),onTimeout: (){

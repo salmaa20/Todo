@@ -14,9 +14,20 @@ class TasksListTab extends StatefulWidget {
 
 class _TasksListTabState extends State<TasksListTab> {
   DateTime _selectedDate = DateTime.now();
+  late TasksProvider provider;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider.retrieveTasks(_selectedDate);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<TasksProvider>(context);
+    provider = Provider.of<TasksProvider>(context);
+
     return Container(
       child: Column(
         children: [
@@ -25,11 +36,11 @@ class _TasksListTabState extends State<TasksListTab> {
             initialDate: _selectedDate,
             firstDate: DateTime.now().subtract(Duration(days: 365)),
             lastDate: DateTime.now().add(Duration(days: 365)),
-            onDateSelected: (date){
+            onDateSelected: (date) {
               setState(() {
                 _selectedDate = date!;
                 provider.retrieveTasks(_selectedDate);
-                });
+              });
             },
             leftMargin: 20,
             monthColor: Colors.black,

@@ -16,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: Text('Todo App'),
       ),
@@ -26,9 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.white, width: 4)),
         onPressed: (){
           showAddTaskBottomSheet();
+
         },
         child: Icon(
-          Icons.add
+          Icons.add,
         ),
       ),
       bottomNavigationBar: BottomAppBar(
